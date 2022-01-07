@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <div class="message">{{ msg }}</div>
 
   <button type="button" @click="increment">同步 count is: {{ store.state.count }}</button>
   <button type="button" @click="incrementAction">异步 count is: {{ store.state.count }}</button>
@@ -24,5 +24,11 @@ const incrementAction = () => {
 const count = ref(0);
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  $msg-size: 28px;
+
+  .message {
+    font-size: $msg-size;
+    font-weight: 700;
+  }
 </style>
