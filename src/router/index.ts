@@ -5,7 +5,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: Home
   },
   {
     path: '/:pathMath(.*)*',
@@ -20,7 +20,6 @@ const router = createRouter({
 
 // 路由拦截器, 自定义拦截内容
 router.beforeEach((to, from, next) => {
-
   next();
 });
 

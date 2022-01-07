@@ -1,11 +1,14 @@
-import { Recordable } from "vite-plugin-mock";
+import { Recordable } from 'vite-plugin-mock';
 
-export function resultSuccess<T = Recordable>(result: T, { message = 'ok' } = {}) {
+export function resultSuccess<T = Recordable>(
+  result: T,
+  { message = 'ok' } = {}
+) {
   return {
     code: 0,
     result,
     message,
-    type: 'success',
+    type: 'success'
   };
 }
 
@@ -13,20 +16,24 @@ export function resultPageSuccess<T = any>(
   page: number,
   pageSize: number,
   list: T[],
-  { message = 'ok' } = {},
+  { message = 'ok' } = {}
 ) {
   const pageData = pagination(page, pageSize, list);
 
   return {
     ...resultSuccess({
       items: pageData,
-      total: list.length,
+      total: list.length
     }),
-    message,
+    message
   };
 }
 
-export function pagination<T = any>(pageNo: number, pageSize: number, array: T[]): T[] {
+export function pagination<T = any>(
+  pageNo: number,
+  pageSize: number,
+  array: T[]
+): T[] {
   const offset = (pageNo - 1) * Number(pageSize);
   const ret =
     offset + Number(pageSize) >= array.length

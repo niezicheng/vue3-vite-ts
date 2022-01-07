@@ -14,8 +14,8 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       viteMockServe({
         // default
         mockPath: 'mock',
-        localEnabled: command === 'serve',
-      }),
+        localEnabled: command === 'serve'
+      })
     ],
 
     resolve: {
@@ -25,7 +25,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       }
     },
 
-    base: "./", // 打包路径
+    base: './', // 打包路径
 
     server: {
       port: 3000,
@@ -34,13 +34,14 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       // https: false,
       proxy: {
         // 依据环境获取 .env.development 或 .env.production 文件中的配置
-        [env.VITE_GLOB_API_URL]: { // '/basic-api'
+        [env.VITE_GLOB_API_URL]: {
+          // '/basic-api'
           target: env.VITE_PROXY, // 在 .env.development 中配置
           changeOrigin: true, // 修改源
-          rewrite: (path) => path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), ''),
+          rewrite: path =>
+            path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), '')
         }
-      },
+      }
     }
-  }
-}
-
+  };
+};

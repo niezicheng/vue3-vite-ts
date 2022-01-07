@@ -1,4 +1,9 @@
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import type {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError
+} from 'axios';
 import axios from 'axios';
 
 export class VAxios {
@@ -13,24 +18,30 @@ export class VAxios {
 
   private setupInterceptors() {
     // 请求拦截器
-    this.axiosInstance.interceptors.request.use(config => {
-      // TODO: 处理请求配置信息 如： config.headers.Authorization = `Bearer ${token}`;
-      return config;
-    }, err => {
-      return Promise.reject(err);
-    });
+    this.axiosInstance.interceptors.request.use(
+      config => {
+        // TODO: 处理请求配置信息 如： config.headers.Authorization = `Bearer ${token}`;
+        return config;
+      },
+      err => {
+        return Promise.reject(err);
+      }
+    );
 
     // 响应拦截器
-    this.axiosInstance.interceptors.response.use(response => {
-      // TODO: 处理响应数据信息
+    this.axiosInstance.interceptors.response.use(
+      response => {
+        // TODO: 处理响应数据信息
 
-      return response;
-    }, err => {
-      let { response } = err;
-      // TODO: 根据不同响应码给出相应错误提示信息
+        return response;
+      },
+      err => {
+        let { response } = err;
+        // TODO: 根据不同响应码给出相应错误提示信息
 
-      return Promise.reject(response);
-    });
+        return Promise.reject(response);
+      }
+    );
   }
 
   get<T = any>(config: AxiosRequestConfig): Promise<T> {
@@ -50,15 +61,15 @@ export class VAxios {
   }
 
   request<T = any>(config: AxiosRequestConfig): Promise<T> {
-
     return new Promise((resolve, reject) => {
-      this.axiosInstance.request<any, AxiosResponse<any>>(config)
-        .then((res) => {
-          resolve(res as unknown as Promise<T>)
+      this.axiosInstance
+        .request<any, AxiosResponse<any>>(config)
+        .then(res => {
+          resolve(res as unknown as Promise<T>);
         })
         .catch((err: Error | AxiosError) => {
           reject(err);
-        })
-    })
+        });
+    });
   }
 }

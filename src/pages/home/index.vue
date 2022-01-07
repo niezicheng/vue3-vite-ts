@@ -16,6 +16,5 @@ import { TestApi, MockGet, MockPost } from '@/api/test';
 
   const res3 = await MockPost();
   console.log('MockPost:', res3);
-})()
-
+})();
 </script>

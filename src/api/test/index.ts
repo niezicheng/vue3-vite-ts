@@ -4,16 +4,17 @@ enum Api {
   // 测试接口
   Test = '/basic-api/sug?code=utf-8&q=电脑',
   Get = '/api/get',
-  Post = '/api/post',
+  Post = '/api/post'
 }
 
 /**
  * @description: 测试线上接口
  */
-export const TestApi = () => defHttp.request({
-  url: Api.Test,
-  method: 'GET',
-});
+export const TestApi = () =>
+  defHttp.request({
+    url: Api.Test,
+    method: 'GET'
+  });
 
 /**
  * @description: 测试 mock get 方法

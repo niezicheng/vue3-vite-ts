@@ -1,5 +1,5 @@
-import { createStore, Store, useStore as useVuexStore } from "vuex";
-import { InjectionKey } from "vue";
+import { createStore, Store, useStore as useVuexStore } from 'vuex';
+import { InjectionKey } from 'vue';
 
 export interface State {
   count: number;
@@ -10,7 +10,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 // 处理 state 类型
 export const useStore = () => {
   return useVuexStore(key);
-}
+};
 
 const store = createStore<State>({
   // 数据源
@@ -21,7 +21,7 @@ const store = createStore<State>({
   getters: {},
   // 同步操作
   mutations: {
-    increment (state) {
+    increment(state) {
       state.count++;
     }
   },
@@ -30,11 +30,11 @@ const store = createStore<State>({
     incrementAction: ({ commit }) => {
       setTimeout(() => {
         commit('increment');
-      }, 2000)
+      }, 2000);
     }
   },
   // 模块划分
   modules: {}
-})
+});
 
 export default store;
