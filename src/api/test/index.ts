@@ -2,7 +2,7 @@ import { defHttp } from '@/utils/http';
 
 enum Api {
   // 测试接口
-  Test = '/test/sug?code=utf-8&q=电脑',
+  Test = '/basic-api/sug?code=utf-8&q=电脑',
   Get = '/api/get',
   Post = '/api/post',
 }

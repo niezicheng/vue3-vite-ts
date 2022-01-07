@@ -1,8 +1,12 @@
 import { UserConfigExport, ConfigEnv } from 'vite';
 import { viteMockServe } from 'vite-plugin-mock';
 import vue from '@vitejs/plugin-vue';
+import { loadEnv } from 'vite';
 import { resolve } from 'path';
-export default ({ command }: ConfigEnv): UserConfigExport => {
+
+export default ({ command, mode }: ConfigEnv): UserConfigExport => {
+  const root = process.cwd();
+  const env = loadEnv(mode, root);
 
   return {
     plugins: [
@@ -29,13 +33,13 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       cors: true,
       // https: false,
       proxy: {
-        '/test': {
-          target: "https://suggest.taobao.com", // 目标地址
+        // 依据环境获取 .env.development 或 .env.production 文件中的配置
+        [env.VITE_GLOB_API_URL]: { // '/basic-api'
+          target: env.VITE_PROXY, // 在 .env.development 中配置
           changeOrigin: true, // 修改源
-          // secure: false, // ssl
-          rewrite: path => path.replace(/^\/test/, ''),
-        },
-      }
+          rewrite: (path) => path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), ''),
+        }
+      },
     }
   }
 }
