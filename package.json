@@ -1,9 +1,11 @@
 {
   "name": "vue3-vite-ts",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "prerelease": "standard-version --release-as patch --dry-run",
+    "release": "standard-version --release-as patch",
     "preview": "vite preview",
     "lint": "lint-staged --allow-empty",
     "lint:fix": "eslint src/**/*.{vue,ts} --fix",
@@ -50,6 +52,7 @@
     "lint-staged": "^12.1.7",
     "prettier": "^2.5.1",
     "sass": "^1.46.0",
+    "standard-version": "^9.3.2",
     "stylus": "^0.56.0",
     "typescript": "^4.4.4",
     "vite": "^2.7.2",
