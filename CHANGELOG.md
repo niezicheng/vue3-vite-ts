@@ -1,6 +1,13 @@
 # 更新日志 
 
 
+### [0.0.3](https://github.com/niezicheng/vue3-vite-ts/compare/v0.0.2...v0.0.3) (2022-01-10)
+
+
+### ✨ Features | 新功能
+
+* 🎸 add naive UI 组件库 ([847ebbd](https://github.com/niezicheng/vue3-vite-ts/commit/847ebbd22c7a725f4bc6fb70817757e39a7c56e8))
+
 ### [0.0.2](https://github.com/niezicheng/vue3-vite-ts/compare/v0.0.1...v0.0.2) (2022-01-10)
 
 
