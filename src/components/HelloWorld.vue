@@ -1,12 +1,10 @@
 <template>
   <div class="message">{{ msg }}</div>
 
-  <button type="button" @click="increment">
-    同步 count is: {{ store.state.count }}
-  </button>
-  <button type="button" @click="incrementAction">
+  <NButton @click="increment">同步 count is: {{ store.state.count }}</NButton>
+  <NButton @click="incrementAction">
     异步 count is: {{ store.state.count }}
-  </button>
+  </NButton>
 </template>
 
 <script setup lang="ts">

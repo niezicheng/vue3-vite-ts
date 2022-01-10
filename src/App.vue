@@ -1,9 +1,30 @@
-<script setup lang="ts"></script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <RouterView></RouterView>
+  <NConfigProvider :locale="zhCN" :date-locale="dateZhCN">
+    <NLoadingBarProvider>
+      <NMessageProvider>
+        <NNotificationProvider>
+          <NDialogProvider>
+            <AppProvider>
+              <RouterView />
+            </AppProvider>
+          </NDialogProvider>
+        </NNotificationProvider>
+      </NMessageProvider>
+    </NLoadingBarProvider>
+  </NConfigProvider>
 </template>
+
+<script setup lang="ts">
+import {
+  NConfigProvider,
+  NLoadingBarProvider,
+  NMessageProvider,
+  NNotificationProvider,
+  NDialogProvider,
+  zhCN,
+  dateZhCN
+} from 'naive-ui';
+</script>
 
 <style>
 #app {

@@ -1,6 +1,6 @@
 <template>
   <div>404 page</div>
-  <button @click="onBack">返回</button>
+  <NButton @click="onBack">返回</NButton>
 </template>
 
 <script setup lang="ts">
