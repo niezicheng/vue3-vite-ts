@@ -38,6 +38,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           // '/basic-api'
           target: env.VITE_PROXY, // 在 .env.development 中配置
           changeOrigin: true, // 修改源
+          // ws: true, // if you want to proxy websockets
           rewrite: path =>
             path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), '')
         }
