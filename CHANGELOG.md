@@ -1,6 +1,13 @@
 # 更新日志 
 
 
+### [0.0.2](https://github.com/niezicheng/vue3-vite-ts/compare/v0.0.1...v0.0.2) (2022-01-10)
+
+
+### ✨ Features | 新功能
+
+* 🎸 add commitlint 规范提交配置 ([f929305](https://github.com/niezicheng/vue3-vite-ts/commit/f9293058c1faad94f4dbba1ae3b117135cedb199))
+
 ### 0.0.1 (2022-01-10)
 
 
