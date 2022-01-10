@@ -1,6 +1,7 @@
 import { UserConfigExport, ConfigEnv } from 'vite';
 import { viteMockServe } from 'vite-plugin-mock';
 import vue from '@vitejs/plugin-vue';
+// import eslintPlugin from "vite-plugin-eslint";
 import { loadEnv } from 'vite';
 import { resolve } from 'path';
 
@@ -11,6 +12,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   return {
     plugins: [
       vue(),
+      // eslintPlugin(),
       viteMockServe({
         // default
         mockPath: 'mock',

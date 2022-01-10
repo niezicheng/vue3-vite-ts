@@ -5,7 +5,7 @@ export interface State {
   count: number;
 }
 
-export const key: InjectionKey<Store<State>> = Symbol();
+export const key: InjectionKey<Store<State>> = Symbol('store-key');
 
 // 处理 state 类型
 export const useStore = () => {
@@ -22,7 +22,7 @@ const store = createStore<State>({
   // 同步操作
   mutations: {
     increment(state) {
-      state.count++;
+      state.count += 1;
     }
   },
   // 异步操作

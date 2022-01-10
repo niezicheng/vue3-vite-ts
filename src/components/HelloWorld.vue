@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useStore } from '../store';
 
 defineProps<{ msg: string }>();
@@ -24,8 +23,6 @@ const increment = () => {
 const incrementAction = () => {
   store.dispatch('incrementAction');
 };
-
-const count = ref(0);
 </script>
 
 <style lang="scss" scoped>

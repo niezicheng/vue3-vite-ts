@@ -8,6 +8,7 @@ import axios from 'axios';
 
 export class VAxios {
   private axiosInstance: AxiosInstance;
+
   private readonly options;
 
   constructor(options: any) {
@@ -36,7 +37,7 @@ export class VAxios {
         return response;
       },
       err => {
-        let { response } = err;
+        const { response } = err;
         // TODO: 根据不同响应码给出相应错误提示信息
 
         return Promise.reject(response);
