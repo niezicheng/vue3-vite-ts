@@ -18,9 +18,15 @@
         :key="index"
         :data="card"
         :total-time="cardData?.totalTime"
-        mixed
+        :show-avatar="false"
+        :left-grid-item-props="{ span: 1 }"
+        :body-grid-item-props="{ span: 22, class: 'card-body-mixed' }"
+        :right-grid-item-props="{
+          span: 1,
+          style: 'alignItems: center; justifyContent: center;',
+          class: 'card-body-mixed'
+        }"
       >
-        <template #avatar></template>
         <template #body="{ members = [], totalTime }">
           <div
             v-for="(member, key) in members"

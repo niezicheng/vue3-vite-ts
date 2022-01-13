@@ -14,7 +14,11 @@
         :data="card"
         :ranking="index + 1"
         :total-time="cardData?.totalTime"
-      ></Card>
+      >
+        <!-- <template #avatar="{ name }">
+          {{ name }}
+        </template> -->
+      </Card>
     </NSpace>
   </div>
 </template>

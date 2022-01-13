@@ -3,6 +3,7 @@ export const cardData = {
   data: [
     {
       name: 'Trantor',
+      avatarColor: '#fed616',
       consumeTime: 42,
       members: [
         {
@@ -22,6 +23,7 @@ export const cardData = {
     {
       name: '乐歌',
       consumeTime: 23,
+      avatarColor: '#C3D7E5',
       members: [
         {
           name: '曹越',
@@ -36,6 +38,7 @@ export const cardData = {
     {
       name: '乐歌',
       consumeTime: 23,
+      avatarColor: '#CF9972',
       members: [
         {
           name: '曹越',
