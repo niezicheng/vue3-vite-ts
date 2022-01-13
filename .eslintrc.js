@@ -54,6 +54,7 @@ module.exports = {
     "vue/script-setup-uses-vars": "error", // 标记 setup 中的变量为 used
     "prettier/prettier": ["error", { endOfLine: "auto" }], // 解决 prettier 行尾报错
     "import/prefer-default-export": "off", // 是否需要含有默认导出
+    "vue/no-v-model-argument": "off", // 'v-model' directives require no argument
     "no-param-reassign": [
       "error",
       {
