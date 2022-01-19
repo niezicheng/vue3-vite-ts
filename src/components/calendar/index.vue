@@ -1,27 +1,17 @@
 <template>
   <div class="month">
-    <div class="month-operator">
-      <NSpace align="center">
-        <span>{{ formatShowMonthDate }}</span>
-        <NButton @click="showMonthDate = dayjs(showMonthDate).subtract(1, 'M')"
-          >&lt;</NButton
-        >
-        <NButton @click="showMonthDate = dayjs(showMonthDate).add(1, 'M')"
-          >&gt;</NButton
-        >
-        <NButton @click="showMonthDate = dayjs()">今天</NButton>
-      </NSpace>
-    </div>
-    <!-- header -->
-    <div class="month-header">
+    <Header v-model:date="currentDate" />
+    <!-- week -->
+    <div class="month-week">
       <div
         v-for="(week, index) in weeks"
         :key="index"
-        class="month-header-column"
+        class="month-week-column"
       >
         {{ week }}
       </div>
     </div>
+    <!-- body -->
     <div ref="bodyRef" class="month-body">
       <div
         v-for="(week, index) in monthWeeks"
@@ -61,10 +51,10 @@
 
 <script setup lang="ts">
 /* eslint-disable vue/require-default-prop */
-import { ref, unref, computed, watchEffect, withDefaults, toRefs } from 'vue';
+import { ref, unref, watchEffect, withDefaults, toRefs } from 'vue';
 import { filter, forEach } from 'lodash-es';
 import dayjs, { Dayjs, ConfigType } from 'dayjs';
-import { NButton, NSpace } from 'naive-ui';
+import Header from './header.vue';
 import {
   WEEKS,
   getMonthByDay,
@@ -89,34 +79,32 @@ const props = withDefaults(defineProps<Props>(), {});
 
 const { defaultDate, events } = toRefs(props);
 
-console.log(events.value, 'events.value');
-
-const showMonthDate = ref<Dayjs | ConfigType>(unref(defaultDate) || dayjs());
+// 当前显示日期
+const currentDate = ref<Dayjs | ConfigType>(unref(defaultDate) || dayjs());
+// 星期数组
 const weeks = ref(WEEKS || []);
-const monthWeeks = ref(getMonthByDay(showMonthDate.value));
+// 获取当前月份周数组
+const monthWeeks = ref(getMonthByDay(currentDate.value));
 
+// 日期容器实例
 const bodyRef = ref<Element>();
+// 事件位置样式数组
 const eventPositionMap = ref<{ [key: string]: any }[]>([]);
+// 当前月份各周事件数组
 const monthWeekEvents: any = ref([]);
 
-const formatShowMonthDate = computed(() => {
-  const year = dayjs(unref(showMonthDate)).year();
-  const month = dayjs(unref(showMonthDate)).month() + 1;
-
-  return `${year}年${month < 10 ? `0${month}` : month}月`;
-});
-
+// 获取当前月份事件
 const getMonthEvents = () => {
   const bodyWidth = (unref(bodyRef)?.clientWidth || 364) / 7;
   const bodyHeight = (unref(bodyRef)?.clientHeight || 364) / 6;
 
+  /**
+   * 过滤当月事件
+   * 1. startAt 在当月范围内
+   * 2. endAt 在当月范围内
+   * 3. 本月在 startAt - endAt 范围内
+   */
   const monthEvents = filter(unref(events), (e: EventItemProps) => {
-    /**
-     * 日期范围当月内或当月在日期范围内
-     * 1. startAt 在当月范围内
-     * 2. endAt 在当月范围内
-     * 3. 本月在 startAt - endAt 范围内
-     */
     if (unref(monthWeeks)) {
       return (
         (dateIsSameOrBefore(unref(monthWeeks)[0][0], e?.startAt) &&
@@ -130,100 +118,111 @@ const getMonthEvents = () => {
     return false;
   });
 
-  forEach(unref(monthWeeks), (week, weekIndex) => {
-    unref(monthWeekEvents)[weekIndex] = [];
-    unref(eventPositionMap)[weekIndex] = {};
+  if (monthEvents && monthEvents?.length > 0) {
+    forEach(unref(monthWeeks), (week, weekIndex) => {
+      unref(monthWeekEvents)[weekIndex] = [];
+      unref(eventPositionMap)[weekIndex] = {};
 
-    /**
-     * 过滤本周范围内的事件
-     * 1. startAt 在本周范围内
-     * 2. endAt 在本周范围内
-     * 3. 本周在 startAt - endAt 范围内
-     */
-    const weekEvents = filter(monthEvents, (e: EventItemProps) => {
-      return (
-        (dateIsSameOrBefore(week[0], e?.startAt) &&
-          dateIsSameOrBefore(e?.startAt, week[6])) ||
-        (dateIsSameOrBefore(week[0], e?.endAt) &&
-          dateIsSameOrBefore(e?.endAt, week[6])) ||
-        (dateIsSameOrBefore(e?.startAt, week[0]) &&
-          dateIsSameOrBefore(week[6], e?.endAt))
-      );
-    });
+      /**
+       * 过滤本周范围内的事件
+       * 1. startAt 在本周范围内
+       * 2. endAt 在本周范围内
+       * 3. 本周在 startAt - endAt 范围内
+       */
+      const weekEvents = filter(monthEvents, (e: EventItemProps) => {
+        return (
+          (dateIsSameOrBefore(week[0], e?.startAt) &&
+            dateIsSameOrBefore(e?.startAt, week[6])) ||
+          (dateIsSameOrBefore(week[0], e?.endAt) &&
+            dateIsSameOrBefore(e?.endAt, week[6])) ||
+          (dateIsSameOrBefore(e?.startAt, week[0]) &&
+            dateIsSameOrBefore(week[6], e?.endAt))
+        );
+      });
 
-    const newEvents = [...weekEvents];
+      const newEvents = [...weekEvents];
 
-    forEach(week, (day, dayIndex) => {
-      let eventIndex = 0;
+      if (newEvents && newEvents?.length > 0) {
+        forEach(week, (day, dayIndex) => {
+          let eventIndex = 0;
 
-      forEach(newEvents, (weekEvent: any, i: number) => {
-        // 事件日期是否包含当前 day 日期
-        if (
-          dateIsSameOrBefore(weekEvent?.startAt, day) &&
-          dateIsSameOrBefore(day, weekEvent?.endAt)
-        ) {
-          const key = getEventKey(weekEvent);
+          forEach(newEvents, (weekEvent: any, i: number) => {
+            // 事件日期是否包含当前 day 日期
+            if (
+              dateIsSameOrBefore(weekEvent?.startAt, day) &&
+              dateIsSameOrBefore(day, weekEvent?.endAt)
+            ) {
+              const key = getEventKey(weekEvent);
 
-          const startAt = dateIsSameOrBefore(weekEvent?.startAt, week[0])
-            ? dayjs(week[0])
-            : dayjs(weekEvent?.startAt);
-          const endAt = dateIsSameOrBefore(week[6], weekEvent?.endAt)
-            ? dayjs(week[6])
-            : dayjs(weekEvent?.endAt);
+              const startAt = dateIsSameOrBefore(weekEvent?.startAt, week[0])
+                ? dayjs(week[0])
+                : dayjs(weekEvent?.startAt);
+              const endAt = dateIsSameOrBefore(week[6], weekEvent?.endAt)
+                ? dayjs(week[6])
+                : dayjs(weekEvent?.endAt);
 
-          // 时分可能导致 diff 计算问题
-          const diff = dayjs(formatDate(endAt)).diff(
-            dayjs(formatDate(startAt)),
-            'd'
-          );
+              // 时分可能导致 diff 计算问题
+              const diff = dayjs(formatDate(endAt)).diff(
+                dayjs(formatDate(startAt)),
+                'd'
+              );
 
-          if (!unref(eventPositionMap)[weekIndex][key]) {
-            unref(monthWeekEvents)[weekIndex].push(weekEvent);
-          }
-
-          const topCount = unref(monthWeekEvents)[weekIndex].reduce(
-            (acc: number, e: EventItemProps) => {
-              if (
-                (dateIsBefore(e?.startAt, weekEvent.startAt, 'm') &&
-                  dateIsSameOrBefore(weekEvent.startAt, e?.endAt)) ||
-                (dateIsSameOrBefore(e?.startAt, weekEvent.startAt, 'm') &&
-                  dateIsSame(e?.startAt, weekEvent.startAt, 'd')) ||
-                (dateIsSameOrBefore(e?.startAt, weekEvent.startAt, 'm') &&
-                  dateIsSameOrBefore(weekEvent.startAt, e?.endAt, 'm'))
-              ) {
-                // eslint-disable-next-line no-param-reassign
-                acc += 1;
+              if (!unref(eventPositionMap)[weekIndex][key]) {
+                unref(monthWeekEvents)[weekIndex].push(weekEvent);
               }
 
-              return acc;
-            },
-            0
-          );
+              // const topCount = i + 1;
 
-          const top = `${topCount * 16 + 22}px`;
+              const topCount = unref(monthWeekEvents)[weekIndex].reduce(
+                (acc: number, e: EventItemProps) => {
+                  /**
+                   * 1. 循环 e 开始分在 weekEvent 之前且 e 结束时间在 weekEvent 之后
+                   * 2. 循环 e 开始时间与 weekEvent 为同一天（或时间在其之前）
+                   * 3. 循环 e 时间包含 weekEvent
+                   */
+                  if (
+                    (dateIsBefore(e?.startAt, weekEvent.startAt, 'm') &&
+                      dateIsSameOrBefore(weekEvent.startAt, e?.endAt)) ||
+                    (dateIsSameOrBefore(e?.startAt, weekEvent.startAt, 'm') &&
+                      dateIsSame(e?.startAt, weekEvent.startAt, 'd')) ||
+                    (dateIsSameOrBefore(e?.startAt, weekEvent.startAt, 'm') &&
+                      dateIsSameOrBefore(weekEvent.startAt, e?.endAt, 'm'))
+                  ) {
+                    // eslint-disable-next-line no-param-reassign
+                    acc += 1;
+                  }
 
-          if (
-            (topCount + 1) * 16 + 22 < bodyHeight &&
-            !eventPositionMap.value[weekIndex][key]
-          ) {
-            eventPositionMap.value[weekIndex][key] = {
-              width: `${bodyWidth * (diff + 1)}px`,
-              height: '16px',
-              left: `${bodyWidth * dayIndex - 1}px`,
-              top
-            };
-          }
+                  return acc;
+                },
+                0
+              );
 
-          weekEvents.splice(i - eventIndex, 1);
-          eventIndex += 1;
-        }
-      });
+              const top = `${topCount * 16 + 22}px`;
+
+              if (
+                (topCount + 1) * 16 + 22 < bodyHeight &&
+                !eventPositionMap.value[weekIndex][key]
+              ) {
+                eventPositionMap.value[weekIndex][key] = {
+                  width: `${bodyWidth * (diff + 1)}px`,
+                  height: '16px',
+                  left: `${bodyWidth * dayIndex - 1}px`,
+                  top
+                };
+              }
+
+              weekEvents.splice(i - eventIndex, 1);
+              eventIndex += 1;
+            }
+          });
+        });
+      }
     });
-  });
+  }
 };
 
 watchEffect(() => {
-  monthWeeks.value = getMonthByDay(showMonthDate.value);
+  monthWeeks.value = getMonthByDay(currentDate.value);
   getMonthEvents();
 });
 </script>

@@ -113,6 +113,6 @@ export const getMonthByDay = (date: ConfigType) => {
  * @returns 指定事件 key 值
  */
 export const getEventKey = (e: EventItemProps) => {
-  const itemKey = e?.eventItemKey || 'id';
+  const itemKey = e?.eventItemKey || 'name';
   return `event_${get(e, itemKey)}`;
 };

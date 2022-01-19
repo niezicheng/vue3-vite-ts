@@ -25,7 +25,7 @@
       checked ? '✔' : name?.slice(0, 1)
     }}</slot>
   </NAvatar>
-  <div>{{ name }}</div>
+  <div :style="checked ? { color: '#0073FF' } : {}">{{ name }}</div>
 </template>
 
 <script setup lang="ts">

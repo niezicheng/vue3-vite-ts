@@ -1,4 +1,7 @@
 <template>
+  <PageHeader sub-title="Design department" separate="-">
+    <template #title>Working hours</template>
+  </PageHeader>
   <div class="container">
     <Header :data="headerData" @change="handleChange" />
     <Calendar :events="eventArr" />
@@ -7,6 +10,7 @@
 
 <script setup lang="ts">
 import { ref, unref, watchEffect, computed } from 'vue';
+import PageHeader from '@/components/pageHeader/index.vue';
 import Calendar from '@/components/calendar/index.vue';
 import Header from './header/index.vue';
 import { headerData, eventData } from './data';
@@ -37,6 +41,5 @@ watchEffect(() => {
 .container {
   width: 90%;
   margin: 0 auto;
-  padding: 50px 0;
 }
 </style>
