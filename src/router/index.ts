@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/pd-project/index.vue')
   },
   {
+    path: '/demo',
+    name: 'Demo',
+    component: () => import('@/pages/demo/index.vue')
+  },
+  {
     path: '/:pathMath(.*)*',
     component: () => import('@/pages/404.vue')
   }
