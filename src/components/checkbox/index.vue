@@ -22,38 +22,50 @@
       v-bind="avatarProps"
       @click="handleClick"
     >
-      <slot name="avatar" :checked="checked" :label="label">{{
-        checked ? '✔' : `${label}`?.slice(0, 1)
+      <slot name="avatar" :checked="checked" :label="labelMerge">{{
+        checked ? '✔' : `${labelMerge}`?.slice(0, 1)
       }}</slot>
     </NAvatar>
-    <div :style="checked ? { color: checkedColor } : {}">
-      {{ label }}
+    <div class="label" :style="checked ? { color: checkedColor } : {}">
+      {{ labelMerge }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /* eslint-disable vue/require-default-prop */
-import { withDefaults, toRefs, ref, unref, watchEffect } from 'vue';
+import { withDefaults, toRefs, ref, unref, watchEffect, computed } from 'vue';
 import { NAvatar, AvatarProps } from 'naive-ui';
 
 type Props = {
+  // 默认值
   defaultChecked?: boolean;
+  // 是否选中
   checked?: boolean;
+  // 是否禁用
   disabled?: boolean;
+  // 头像地址
   avatar?: string;
-  label?: string | number;
+  // label 字段
+  label?: string;
+  // 名称，label 存在时无效
+  name?: string;
+  // 选中颜色
   checkedColor?: string;
+  // 未选中颜色
   unCheckedColor?: string;
+  // 尺寸大小
   size?: number;
+  // 内部 NAvatar 组件属性对象
   avatarProps?: AvatarProps;
 };
 
 const props = withDefaults(defineProps<Props>(), {
-  // defaultChecked: false,
-  // checked: false,
+  defaultChecked: false,
+  checked: false,
   disabled: false,
   label: 'Checkbox',
+  name: 'Checkbox',
   checkedColor: '#0073FF',
   unCheckedColor: '#8EBDF6',
   size: 56
@@ -64,6 +76,8 @@ const emits = defineEmits(['update:checked']);
 const { disabled, checkedColor } = toRefs(props);
 
 const checked = ref<boolean>();
+
+const labelMerge = computed(() => props?.label || props?.name);
 
 watchEffect(() => {
   checked.value = props?.checked || props?.defaultChecked;
@@ -88,6 +102,10 @@ const handleClick = () => {
     border-style: solid;
     border-width: 1px;
     border-color: transparent;
+  }
+
+  .label {
+    text-align: center;
   }
 }
 </style>

@@ -47,7 +47,6 @@ export const eventData = [
     bgColor: 'rgba(237,226,255,1)',
     prefixColor: 'rgba(125,47,244,1)'
   },
-
   {
     id: 6,
     startAt: `${today} 14:00:00`,
@@ -108,43 +107,43 @@ export const eventData = [
 
 export const headerData = [
   {
-    name: '李政'
+    label: '李政'
   },
   {
-    name: '曹越'
+    label: '曹越'
   },
   {
-    name: '张智翔'
+    label: '张智翔'
   },
   {
-    name: '王梦'
+    label: '王梦'
   },
   {
-    name: '唐娟'
+    label: '唐娟'
   },
   {
-    name: '陈燮民',
+    label: '陈燮民',
     avatar:
       'http://pic1.zhimg.com/v2-cda469e0afc9b0376b4ce69d79601bbe_1440w.jpg'
   },
   {
-    name: '陈灵炜',
+    label: '陈灵炜',
     avatar:
       'http://pic1.zhimg.com/v2-cda469e0afc9b0376b4ce69d79601bbe_1440w.jpg'
   },
   {
-    name: '赵欢'
+    label: '赵欢'
   },
   {
-    name: '尹帅英'
+    label: '尹帅英'
   },
   {
-    name: '俞叠'
+    label: '俞叠'
   },
   {
-    name: '辛悦'
+    label: '辛悦'
   },
   {
-    name: '刘晓庆'
+    label: '刘晓庆'
   }
 ];

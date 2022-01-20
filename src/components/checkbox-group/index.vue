@@ -5,7 +5,7 @@
       :key="index"
       :avatar="(option as Option)?.avatar"
       :checked="isChecked(option)"
-      :label="labelOrValue(option, 'label')"
+      :label="labelOrValue(option, 'label') as string"
       :disabled="disabled || isDisabled(option)"
       @update:checked="
         checked => updateChecked({ checked, val: labelOrValue(option) })
@@ -20,7 +20,7 @@ import { withDefaults, ref, unref, watchEffect, computed } from 'vue';
 import Checkbox from '../checkbox/index.vue';
 
 type Option = {
-  label: string | number;
+  label: string;
   value?: string | number;
   avatar?: string;
 };
@@ -46,8 +46,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emits = defineEmits(['update:value']);
-
-// const { disabled, checkedColor } = toRefs(props);
 
 const value = ref<Array<string | number>>([]);
 
