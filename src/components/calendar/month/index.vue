@@ -24,11 +24,17 @@
         >
           <div class="month-body-day-header">
             <span class="lunarDay">{{ getLunarDay(date) }}</span>
-            <div class="day">
+            <div
+              :class="[
+                dateIsSame(date, currentDate, 'M') && !isOffDay(date)
+                  ? 'day'
+                  : 'other-day'
+              ]"
+            >
               <span :class="[dateIsSame(date, dayjs()) ? 'today' : '']">{{
                 getDay(date)
               }}</span>
-              <span class="day">日</span>
+              <span>日</span>
             </div>
           </div>
         </div>
@@ -50,7 +56,7 @@
 
 <script setup lang="ts">
 /* eslint-disable vue/require-default-prop */
-import { ref, unref, watchEffect, withDefaults, toRefs } from 'vue';
+import { ref, unref, watchEffect, withDefaults, toRefs, onMounted } from 'vue';
 import { filter, forEach, sortBy } from 'lodash-es';
 import dayjs, { Dayjs, ConfigType } from 'dayjs';
 import {
@@ -68,8 +74,8 @@ import { EventItemProps } from '../interface';
 import './style.scss';
 
 interface Props {
-  // 默认日期
-  defaultDate?: Dayjs | ConfigType;
+  // 当前日期
+  currentDate?: Dayjs | ConfigType;
   // 事件数组
   events: Array<EventItemProps>;
   // 事件展示排序
@@ -87,19 +93,32 @@ const { events, sortEventKey } = toRefs(props);
 // 星期数组
 const weeks = ref(WEEKS || []);
 // 获取当前月份周数组
-const monthWeeks = ref(getMonthByDay(props?.defaultDate));
+const monthWeeks = ref(getMonthByDay(props?.currentDate));
 
 // 日期容器实例
 const bodyRef = ref<Element>();
+// 天对应元素尺寸
+const bodyDaySize = ref<{ width: number; height: number }>();
+
 // 事件位置样式数组
 const eventPositionMap = ref<{ [key: string]: any }[]>([]);
 // 当前月份各周事件数组
 const monthWeekEvents: any = ref([]);
 
+onMounted(() => {
+  const monthWeeksLength = monthWeeks.value?.length || 6;
+  bodyDaySize.value = {
+    width: (unref(bodyRef)?.clientWidth || 1296) / 7,
+    height: (unref(bodyRef)?.clientHeight || 846) / monthWeeksLength
+  };
+});
+
 // 获取当前月份事件
 const getMonthEvents = () => {
-  const bodyWidth = (unref(bodyRef)?.clientWidth || 364) / 7;
-  const bodyHeight = (unref(bodyRef)?.clientHeight || 364) / 6;
+  const monthWeeksLength = monthWeeks.value?.length || 6;
+  const lastWeekIdx = monthWeeksLength - 1;
+  const bodyDayWidth = unref(bodyDaySize)?.width || 185;
+  const bodyDayHeight = unref(bodyDaySize)?.height || 141;
 
   /**
    * 过滤当月事件
@@ -111,11 +130,14 @@ const getMonthEvents = () => {
     if (unref(monthWeeks)) {
       return (
         (dateIsSameOrBefore(unref(monthWeeks)[0][0], e?.startAt) &&
-          dateIsSameOrBefore(e?.startAt, unref(monthWeeks)[5]?.[6])) ||
+          dateIsSameOrBefore(
+            e?.startAt,
+            unref(monthWeeks)[lastWeekIdx]?.[6]
+          )) ||
         (dateIsSameOrBefore(unref(monthWeeks)[0][0], e?.endAt) &&
-          dateIsSameOrBefore(e?.endAt, unref(monthWeeks)[5]?.[6])) ||
+          dateIsSameOrBefore(e?.endAt, unref(monthWeeks)[lastWeekIdx]?.[6])) ||
         (dateIsSameOrBefore(e?.startAt, unref(monthWeeks)[0][0]) &&
-          dateIsSameOrBefore(unref(monthWeeks)[5]?.[6], e?.endAt))
+          dateIsSameOrBefore(unref(monthWeeks)[lastWeekIdx]?.[6], e?.endAt))
       );
     }
     return false;
@@ -180,13 +202,13 @@ const getMonthEvents = () => {
             const top = `${topCount * 16 + 22}px`;
 
             if (
-              (topCount + 1) * 16 + 22 < bodyHeight &&
+              (topCount + 1) * 16 + 22 < bodyDayHeight &&
               !eventPositionMap.value[weekIndex][key]
             ) {
               eventPositionMap.value[weekIndex][key] = {
-                width: `${bodyWidth * (diff + 1)}px`,
+                width: `${bodyDayWidth * (diff + 1)}px`,
                 height: '16px',
-                left: `${bodyWidth * dayIndex - 1}px`,
+                left: `${bodyDayWidth * dayIndex - 1}px`,
                 top
               };
             }
@@ -198,7 +220,7 @@ const getMonthEvents = () => {
 };
 
 watchEffect(() => {
-  monthWeeks.value = getMonthByDay(props?.defaultDate);
+  monthWeeks.value = getMonthByDay(props?.currentDate);
   getMonthEvents();
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="month">
     <Header v-model:date="currentDate" />
-    <Month :default-date="currentDate" :events="events"></Month>
+    <Month :current-date="currentDate" :events="events"></Month>
   </div>
 </template>
 

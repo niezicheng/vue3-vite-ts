@@ -50,9 +50,13 @@ export const dateIsSame = (
 /**
  * 通过日期获取月份
  * @param date 日期
+ * @param isSameWeeks 是否补全均为 6 周
  * @returns 日期所在的月份数组
  */
-export const getMonthByDay = (date: ConfigType) => {
+export const getMonthByDay = (
+  date: ConfigType,
+  isSameWeeks: boolean = false
+) => {
   let weekIndex = 0;
   const monthWeeks: Array<Dayjs[]> = [];
   const currentYear = dayjs(date).year();
@@ -91,17 +95,20 @@ export const getMonthByDay = (date: ConfigType) => {
   }
 
   // 不足 6 行补全 6 行， 防止月份不同导致显示问题
-  if (monthWeeks?.length < 6) {
+  if (isSameWeeks && monthWeeks?.length < 6) {
     const lastWeekDay = lastWeek[6];
 
     // 多层循环（特殊情况：刚好 28 天占四行）
-    map(
-      fill(Array(6 - (monthWeeks?.length ?? 5)), (_: number, row: number) => {
+    const addWeeks = map(
+      fill(Array(6 - monthWeeks.length), 0),
+      (_: number, row: number) => {
         return map(fill(Array(7), 0), (__, i) => {
           return dayjs(lastWeekDay).add(7 * row + i + 1, 'dayjs');
         });
-      })
+      }
     );
+
+    monthWeeks.push(...addWeeks);
   }
 
   return monthWeeks;
