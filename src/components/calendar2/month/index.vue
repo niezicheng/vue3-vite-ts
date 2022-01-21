@@ -139,6 +139,7 @@ const getMonthEvents = () => {
     (event: EventItem) => event?.[sortEventKey.value]
   );
 
+  eventsMap.value = [];
   forEach(sortEvents, (event: EventItem, i: number) => {
     forEach(event?.monthWeeks, (weekEvent: WeekEvent, weekIndex: number) => {
       forEach(weekEvent?.weekDays, (dayEvent: DayEvent, dayIndex: number) => {
