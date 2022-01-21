@@ -1,0 +1,82 @@
+.month {
+    &-week {
+        display: flex;
+        flex-direction: row;
+        &-column {
+        flex: 1;
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #515559;
+        letter-spacing: 0;
+        text-align: right;
+        line-height: 20px;
+        padding: 8px 12px;
+        }
+    }
+
+    &-body {
+        border: 1px solid #f2f2f2;
+        border-width: 0 0 1px 0;
+        &-week {
+            display: flex;
+            flex-direction: row;
+            min-width: 175px;
+        }
+        &-day {
+            flex: 1;
+            border: 1px solid #f2f2f2;
+            border-width: 1px 1px 0 0;
+            padding: 10px 12px;
+            line-height: 14px;
+            min-height: 120px;
+            position: relative;
+
+            &:first-child {
+                border-width: 1px 1px 0 1px;
+            }
+
+            &-header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                height: 20px;
+                font-family: PingFangSC-Regular;
+                font-size: 12px;
+                letter-spacing: 0;
+
+                .lunarDay, .other-day {
+                    color: #8a9199;
+                }
+
+                .day {
+                    color: #17181a;
+                }
+
+                .today {
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    line-height: 20px;
+                    border-radius: 10px;
+                    background-color: #0073ff;
+                    color: #ffffff;
+                    text-align: center;
+                }
+            }
+        }
+
+        .off-day {
+            background-color: #F7F7F7;
+        }
+
+        .day-event {
+            border-left: 0px solid #0073ff;
+            box-sizing: border-box;
+            position: absolute;
+            height: 16px;
+            line-height: 16px;
+            left: 0,
+        }
+    }
+}
