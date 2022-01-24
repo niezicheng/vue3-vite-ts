@@ -76,7 +76,10 @@
             position: absolute;
             height: 16px;
             line-height: 16px;
-            left: 0,
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

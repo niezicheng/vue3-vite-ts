@@ -47,6 +47,14 @@ export const dateIsSame = (
   type: string = 'd'
 ) => (dayjs(before) as any)?.isSame(dayjs(after), type);
 
+// 获取日期为当月的第几天
+export const isWeekOfMonth = (date: Dayjs | ConfigType) => {
+  const currentDate = dayjs(date);
+  const saturday = currentDate.date() + (6 - currentDate.day());
+
+  return Math.ceil(saturday / 7);
+};
+
 /**
  * 通过日期获取月份
  * @param date 日期

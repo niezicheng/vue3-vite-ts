@@ -101,11 +101,9 @@ interface Props {
   sortEventKey?: SortEventKey;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  sortEventKey: 'id'
-});
+const props = withDefaults(defineProps<Props>(), {});
 
-const { events, sortEventKey } = toRefs(props);
+const { events } = toRefs(props);
 
 // 星期数组
 const weeks = ref(WEEKS || []);
@@ -134,10 +132,12 @@ onMounted(() => {
 // 获取当前月份事件
 const getMonthEvents = () => {
   // 展示事件排序
-  const sortEvents = sortBy(
-    events.value,
-    (event: EventItem) => event?.[sortEventKey.value]
-  );
+  const sortEvents = sortBy(events.value, (event: EventItem) => {
+    if (props?.sortEventKey) {
+      return event?.[props?.sortEventKey];
+    }
+    return dayjs(event?.monthWeeks[0]?.weekDays[0]?.time)?.unix();
+  });
 
   eventsMap.value = [];
   forEach(sortEvents, (event: EventItem, i: number) => {
